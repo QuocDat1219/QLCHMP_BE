@@ -5,7 +5,7 @@ const { checkInsert, checkUpdate } = require("../auth/checkInfomation");
 const getAllNhanVien = async (req, res) => {
   try {
     const sqlQuery =
-      "select nv.MaNV as MaNV, cn.TenCN as TenCN, cv.TenCV as TenCV,nv.TenNV as TenNV, nv.NgaySinh as NgaySinh, nv.GioiTinh as GioiTinh,nv.Diachi as DiaChi, nv.Sdt as Sdt from nhanvien nv inner join chinhanh cn on nv.MaCN = cn.MaCN inner join chucvu cv on nv.MaCV = cv.MaCV";
+      "SELECT nv.MaNV as MaNV, cn.TenCN as TenCN, TenKV, nv.TenNV as TenNV, nv.NgaySinh as NgaySinh, nv.GioiTinh as GioiTinh, nv.Diachi as DiaChi, nv.Sdt as Sdt FROM nhanvien nv INNER JOIN chinhanh cn ON nv.MaCN = cn.MaCN inner join khuvuc kv on cn.MaKV = kv.MaKV";
     const allNhanVien = await sqlPool.request().query(sqlQuery);
     if (allNhanVien.recordset.length > 0) {
       res.status(200).json(allNhanVien.recordset);
@@ -13,6 +13,7 @@ const getAllNhanVien = async (req, res) => {
       res.send({ message: "Không có nhân viên" });
     }
   } catch (error) {
+    console.error(error);
     res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
   }
 };

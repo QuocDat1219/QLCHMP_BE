@@ -78,16 +78,18 @@ const getColumnOfTable = async (req, res) => {
 };
 
 const getDieuKienViTu = async (req, res) => {
+  const { cot, bang } = req.body;
   try {
     mysqlConnection.query(
-      `SELECT MaCV, TenCV FROM chucvu`,
+      `SELECT ${cot} FROM ${bang}`,
       (queryError, results) => {
         if (queryError) {
           console.error("Lỗi truy vấn MySQL:", queryError);
           res.send({ error: "Lỗi truy vấn MySQL" });
           return;
         }
-        res.status(200).json({ results });
+        const data = results.map((row) => Object.values(row)[0]);
+        res.status(200).json({ data });
       }
     );
   } catch (error) {}
