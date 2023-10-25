@@ -11,7 +11,7 @@ const getAllMATHANG = async (req, res) => {
     if (isMATHANG > 0) {
       res.status(200).json(allMATHANG.recordset);
     } else {
-      res.json({ message: "Không có sản phẩm" });
+      res.json({ message: "Không có " });
     }
   } catch (error) {
     console.error(error);
@@ -30,7 +30,7 @@ const getMATHANGById = async (req, res) => {
     if (count > 0) {
       res.status(200).json(aMATHANG.recordset);
     } else {
-      res.send({ message: "sản phẩm không tồn tại" });
+      res.send({ message: "Không tồn tại" });
     }
   } catch (error) {
     res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
@@ -54,7 +54,7 @@ const createMATHANG = async (req, res) => {
   try {
     const TMATHANGxists = await checkInsert(checkMATHANG);
     if (TMATHANGxists) {
-      res.send({ message: "sản phẩm đã tồn tại" });
+      res.send({ message: "Đã tồn tại" });
       return;
     }
 
@@ -62,21 +62,19 @@ const createMATHANG = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res.send({ message: "Lỗi khi thêm sản phẩm ở SQL Server" });
+        res.send({ message: "Lỗi khi thêm ở SQL Server" });
       } else {
         mysqlConnection.query(insertQuery, (mysqlError) => {
           if (mysqlError) {
-            res.send({ message: "Lỗi khi thêm sản phẩm ở MySql" });
+            res.send({ message: "Lỗi khi thêm ở MySql" });
           } else {
-            res
-              .status(200)
-              .json({ message: "Đồng bộ thêm sản phẩm thành công" });
+            res.status(200).json({ message: "Đồng bộ thêm thành công" });
           }
         });
       }
     });
   } catch (error) {
-    res.send({ message: "Thêm sản phẩm không thành công" });
+    res.send({ message: "Thêm không thành công" });
   }
 };
 
@@ -105,21 +103,19 @@ const updateMATHANG = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res.send({ message: "Lỗi khi cập nhật sản phẩm ở SQL Server" });
+        res.send({ message: "Lỗi khi cập nhật ở SQL Server" });
       } else {
         mysqlConnection.query(updateQuery, (mysqlError) => {
           if (mysqlError) {
-            res.send({ message: "Lỗi khi cập nhật sản phẩm ở MySql" });
+            res.send({ message: "Lỗi khi cập nhật ở MySql" });
           } else {
-            res
-              .status(200)
-              .json({ message: "Đồng bộ cập nhật sản phẩm thành công" });
+            res.status(200).json({ message: "Đồng bộ cập nhật thành công" });
           }
         });
       }
     });
   } catch (error) {
-    res.send({ message: "Cập nhật sản phẩm không thành công" });
+    res.send({ message: "Cập nhật không thành công" });
   }
 };
 
@@ -137,16 +133,14 @@ const deleteMATHANG = async (req, res) => {
 
     sqlPool.request().query(deleteteTK, (sqlError) => {
       if (sqlError) {
-        res.send({ message: "Lỗi khi xóa sản phẩm ở SQL Server" });
+        res.send({ message: "Lỗi khi xóa ở SQL Server" });
       } else {
         mysqlConnection.query(deleteteTK, (mysqlError) => {
           if (mysqlError) {
             console.log(mysqlError);
-            res.send({ message: "Lỗi khi xóa sản phẩm ở MySql" });
+            res.send({ message: "Lỗi khi xóa ở MySql" });
           } else {
-            res
-              .status(200)
-              .json({ message: "Đồng bộ xóa sản phẩm thành công" });
+            res.status(200).json({ message: "Đồng bộ xóa thành công" });
           }
         });
       }

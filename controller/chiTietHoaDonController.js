@@ -11,7 +11,7 @@ const getAllCHITIETHOADON = async (req, res) => {
     if (isCHITIETHOADON > 0) {
       res.status(200).json(allCHITIETHOADON.recordset);
     } else {
-      res.json({ message: "Không có chi tiết hóa đơn" });
+      res.json({ message: "Không có " });
     }
   } catch (error) {
     console.error(error);
@@ -30,7 +30,7 @@ const getCHITIETHOADONById = async (req, res) => {
     if (count > 0) {
       res.status(200).json(aCHITIETHOADON.recordset);
     } else {
-      res.send({ message: "chi tiết hóa đơn không tồn tại" });
+      res.send({ message: "Không tồn tại" });
     }
   } catch (error) {
     res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
@@ -45,7 +45,7 @@ const createCHITIETHOADON = async (req, res) => {
   try {
     const TKExists = await checkInsert(checkCHITIETHOADON);
     if (TKExists) {
-      res.send({ message: "chi tiết hóa đơn đã tồn tại" });
+      res.send({ message: "Đã tồn tại" });
       return;
     }
 
@@ -53,21 +53,19 @@ const createCHITIETHOADON = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res.send({ message: "Lỗi khi thêm chi tiết hóa đơn ở SQL Server" });
+        res.send({ message: "Lỗi khi thêm ở SQL Server" });
       } else {
         mysqlConnection.query(insertQuery, (mysqlError) => {
           if (mysqlError) {
-            res.send({ message: "Lỗi khi thêm chi tiết hóa đơn ở MySql" });
+            res.send({ message: "Lỗi khi thêm ở MySql" });
           } else {
-            res
-              .status(200)
-              .json({ message: "Đồng bộ thêm chi tiết hóa đơn thành công" });
+            res.status(200).json({ message: "Đồng bộ thêm  thành công" });
           }
         });
       }
     });
   } catch (error) {
-    res.send({ message: "Thêm chi tiết hóa đơn không thành công" });
+    res.send({ message: "Thêm  không thành công" });
   }
 };
 
@@ -79,7 +77,7 @@ const updateCHITIETHOADON = async (req, res) => {
   try {
     const TKExists = await checkInsert(checkCHITIETHOADON);
     if (!TKExists) {
-      res.send({ message: "Không tìm thấy chi tiết hóa đơn" });
+      res.send({ message: "Không tìm thấy " });
       return;
     }
 
@@ -88,24 +86,24 @@ const updateCHITIETHOADON = async (req, res) => {
         console.error(sqlError);
 
         res.send({
-          message: "Lỗi khi cập nhật chi tiết hóa đơn ở SQL Server",
+          message: "Lỗi khi cập nhật ở SQL Server",
         });
       } else {
         mysqlConnection.query(updateQuery, (mysqlError) => {
           if (mysqlError) {
             res.send({
-              message: "Lỗi khi cập nhật chi tiết hóa đơn ở MySql",
+              message: "Lỗi khi cập nhật ở MySql",
             });
           } else {
             res.status(200).json({
-              message: "Đồng bộ cập nhật chi tiết hóa đơn thành công",
+              message: "Đồng bộ cập nhật thành công",
             });
           }
         });
       }
     });
   } catch (error) {
-    res.send({ message: "Cập nhật chi tiết hóa đơn không thành công" });
+    res.send({ message: "Cập nhật không thành công" });
   }
 };
 
@@ -117,22 +115,20 @@ const deleteCHITIETHOADON = async (req, res) => {
   try {
     const khoExists = await checkInsert(checkTK);
     if (!khoExists) {
-      res.send({ message: "Không tìm thấy chi tiết hóa đơn" });
+      res.send({ message: "Không tìm thấy " });
       return;
     }
 
     sqlPool.request().query(deleteteTK, (sqlError) => {
       if (sqlError) {
-        res.send({ message: "Lỗi khi xóa chi tiết hóa đơn ở SQL Server" });
+        res.send({ message: "Lỗi khi xóa ở SQL Server" });
       } else {
         mysqlConnection.query(deleteteTK, (mysqlError) => {
           if (mysqlError) {
             console.log(mysqlError);
-            res.send({ message: "Lỗi khi xóa chi tiết hóa đơn ở MySql" });
+            res.send({ message: "Lỗi khi xóa ở MySql" });
           } else {
-            res
-              .status(200)
-              .json({ message: "Đồng bộ xóa chi tiết hóa đơn thành công" });
+            res.status(200).json({ message: "Đồng bộ xóa thành công" });
           }
         });
       }

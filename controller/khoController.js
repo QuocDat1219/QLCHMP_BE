@@ -13,7 +13,7 @@ const getAllKho = async (req, res) => {
     if (count > 0) {
       res.status(200).json(allKho.recordset);
     } else {
-      res.send({ message: "Không tìm thấy kho" });
+      res.send({ message: "Không tìm thấy" });
     }
   } catch (error) {
     res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
@@ -30,7 +30,7 @@ const getKhoById = async (req, res) => {
     if (count > 0) {
       res.status(200).json(aKho.recordset);
     } else {
-      res.send({ message: "Kho không tồn tại" });
+      res.send({ message: "Không tồn tại" });
     }
   } catch (error) {
     res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
@@ -44,7 +44,7 @@ const createKho = async (req, res) => {
   try {
     const khoExists = await checkInsert(checkKho);
     if (khoExists) {
-      res.send({ message: "Kho đã tồn tại" });
+      res.send({ message: "Đã tồn tại" });
       return;
     }
 
@@ -52,19 +52,19 @@ const createKho = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res.send({ message: "Lỗi khi thêm kho ở SQL Server" });
+        res.send({ message: "Lỗi khi thêm ở SQL Server" });
       } else {
         mysqlConnection.query(insertQuery, (mysqlError) => {
           if (mysqlError) {
-            res.send({ message: "Lỗi khi thêm kho ở MySql" });
+            res.send({ message: "Lỗi khi thêm ở MySql" });
           } else {
-            res.status(200).json({ message: "Đồng bộ thêm kho thành công" });
+            res.status(200).json({ message: "Đồng bộ thêm thành công" });
           }
         });
       }
     });
   } catch (error) {
-    res.send({ message: "Thêm kho không thành công" });
+    res.send({ message: "Thêm không thành công" });
   }
 };
 
@@ -76,21 +76,19 @@ const updateKho = async (req, res) => {
   try {
     const khoExists = await checkUpdate(checkKho);
     if (!khoExists) {
-      res.send({ message: "Không tìm thấy kho" });
+      res.send({ message: "Không tìm thấy" });
       return;
     }
 
     sqlPool.request().query(updateKho, (sqlError) => {
       if (sqlError) {
-        res.send({ message: "Lỗi khi cập nhật kho ở SQL Server" });
+        res.send({ message: "Lỗi khi cập nhật ở SQL Server" });
       } else {
         mysqlConnection.query(updateKho, (mysqlError) => {
           if (mysqlError) {
-            res.send({ message: "Lỗi khi cập nhật kho ở MySql" });
+            res.send({ message: "Lỗi khi cập nhật ở MySql" });
           } else {
-            res
-              .status(200)
-              .json({ message: "Đồng bộ cập nhật kho thành công" });
+            res.status(200).json({ message: "Đồng bộ cập nhật thành công" });
           }
         });
       }
@@ -108,20 +106,20 @@ const deleteKho = async (req, res) => {
   try {
     const khoExists = await checkInsert(checkKho);
     if (!khoExists) {
-      res.send({ message: "Không tìm thấy kho" });
+      res.send({ message: "Không tìm thấy" });
       return;
     }
 
     sqlPool.request().query(deleteteKho, (sqlError) => {
       if (sqlError) {
-        res.send({ message: "Lỗi khi xóa kho ở SQL Server" });
+        res.send({ message: "Lỗi khi xóa ở SQL Server" });
       } else {
         mysqlConnection.query(deleteteKho, (mysqlError) => {
           if (mysqlError) {
             console.log(mysqlError);
-            res.send({ message: "Lỗi khi xóa kho ở MySql" });
+            res.send({ message: "Lỗi khi xóa ở MySql" });
           } else {
-            res.status(200).json({ message: "Đồng bộ xóa kho thành công" });
+            res.status(200).json({ message: "Đồng bộ xóa thành công" });
           }
         });
       }

@@ -20,7 +20,7 @@ const getKhuVucById = async (req, res) => {
     if (aChiNhanh.recordset.length > 0) {
       res.status(200).json(aChiNhanh.recordset);
     } else {
-      res.send({ error: "Không tìm thấy khu vực!" });
+      res.send({ error: "Không tìm thấy!" });
     }
   } catch (error) {
     console.error(error);

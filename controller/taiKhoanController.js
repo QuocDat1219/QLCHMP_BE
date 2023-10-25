@@ -11,7 +11,7 @@ const getAllTaiKhoan = async (req, res) => {
     if (isTaiKhoan > 0) {
       res.status(200).json(allTaiKhoan.recordset);
     } else {
-      res.json({ message: "Không có tài khoản" });
+      res.json({ message: "Không có " });
     }
   } catch (error) {
     res.json({ message: "Lỗi truy vấn cơ sở dữ liệu" });
@@ -28,7 +28,7 @@ const getTaiKhoanById = async (req, res) => {
     if (count > 0) {
       res.status(200).json(aTaiKhoan.recordset);
     } else {
-      res.send({ message: "Tài khoản không tồn tại" });
+      res.send({ message: "Không tồn tại" });
     }
   } catch (error) {
     res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
@@ -42,7 +42,7 @@ const createTaiKhoan = async (req, res) => {
   try {
     const TKExists = await checkInsert(checkTaiKhoan);
     if (TKExists) {
-      res.send({ message: "Tài khoản đã tồn tại" });
+      res.send({ message: "Đã tồn tại" });
       return;
     }
 
@@ -50,21 +50,19 @@ const createTaiKhoan = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res.send({ message: "Lỗi khi thêm tài khoản ở SQL Server" });
+        res.send({ message: "Lỗi khi thêm ở SQL Server" });
       } else {
         mysqlConnection.query(insertQuery, (mysqlError) => {
           if (mysqlError) {
-            res.send({ message: "Lỗi khi thêm tài khoản ở MySql" });
+            res.send({ message: "Lỗi khi thêm ở MySql" });
           } else {
-            res
-              .status(200)
-              .json({ message: "Đồng bộ thêm tài khoản thành công" });
+            res.status(200).json({ message: "Đồng bộ thêm thành công" });
           }
         });
       }
     });
   } catch (error) {
-    res.send({ message: "Thêm tài khoản không thành công" });
+    res.send({ message: "Thêm không thành công" });
   }
 };
 
@@ -84,21 +82,19 @@ const updateTaiKhoan = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res.send({ message: "Lỗi khi cập nhật tài khoản ở SQL Server" });
+        res.send({ message: "Lỗi khi cập nhật ở SQL Server" });
       } else {
         mysqlConnection.query(updateQuery, (mysqlError) => {
           if (mysqlError) {
-            res.send({ message: "Lỗi khi cập nhật tài khoản ở MySql" });
+            res.send({ message: "Lỗi khi cập nhật ở MySql" });
           } else {
-            res
-              .status(200)
-              .json({ message: "Đồng bộ cập nhật tài khoản thành công" });
+            res.status(200).json({ message: "Đồng bộ cập nhật thành công" });
           }
         });
       }
     });
   } catch (error) {
-    res.send({ message: "Cập nhật tài khoản không thành công" });
+    res.send({ message: "Cập nhật không thành công" });
   }
 };
 
@@ -116,16 +112,14 @@ const deleteTaiKhoan = async (req, res) => {
 
     sqlPool.request().query(deleteteTK, (sqlError) => {
       if (sqlError) {
-        res.send({ message: "Lỗi khi xóa tài khoản ở SQL Server" });
+        res.send({ message: "Lỗi khi xóa ở SQL Server" });
       } else {
         mysqlConnection.query(deleteteTK, (mysqlError) => {
           if (mysqlError) {
             console.log(mysqlError);
-            res.send({ message: "Lỗi khi xóa tài khoản ở MySql" });
+            res.send({ message: "Lỗi khi xóa ở MySql" });
           } else {
-            res
-              .status(200)
-              .json({ message: "Đồng bộ xóa tài khoản thành công" });
+            res.status(200).json({ message: "Đồng bộ xóa thành công" });
           }
         });
       }

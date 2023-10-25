@@ -37,7 +37,7 @@ const craeteChiNhanh = async (req, res) => {
   try {
     const TKExists = await checkInsert(checkChiNhanh);
     if (TKExists) {
-      res.send({ message: "Chi nhánh này đã tồn tại" });
+      res.send({ message: "Đã tồn tại" });
       return;
     }
 
@@ -45,22 +45,22 @@ const craeteChiNhanh = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res.send({ message: "Lỗi khi thêm chi nhánh ở SQL Server" });
+        res.send({ message: "Lỗi khi thêm ở SQL Server" });
       } else {
         mysqlConnection.query(insertQuery, (mysqlError) => {
           if (mysqlError) {
-            res.send({ message: "Lỗi khi thêm chi nhánh ở MySql" });
+            res.send({ message: "Lỗi khi thêm ở MySql" });
           } else {
             res
               .status(200)
-              .json({ message: "Đồng bộ thêm chi nhánh thành công" });
+              .json({ message: "Đồng bộ thêm thành công" });
           }
         });
       }
     });
   } catch (error) {
     console.error(error);
-    res.send({ message: "Thêm chi nhánh không thành công" });
+    res.send({ message: "Thêm không thành công" });
   }
 };
 
@@ -81,12 +81,12 @@ const updateChiNhanh = async (req, res) => {
     // Sửa ở cả 2 cơ sở dữ liệu
     sqlPool.request().query(updateQuery, (sqlError) => {
       if (sqlError) {
-        res.json({ error: "Lỗi khi cập nhật chi nhánh trên SQL Server" });
+        res.json({ error: "Lỗi khi cập nhật trên SQL Server" });
       } else {
         mysqlConnection.query(updateQuery, (mysqlError) => {
           if (mysqlError) {
-            console.error("Lỗi khi cập nhật chi nhánh trên MySQL:", mysqlError);
-            res.json({ error: "Lỗi khi cập nhật chi nhánh trên MySQL" });
+            console.error("Lỗi khi cập nhật trên MySQL:", mysqlError);
+            res.json({ error: "Lỗi khi cập nhật trên MySQL" });
           } else {
             res.status(200).json({
               message: "Đồng bộ cập nhật thành công!",
@@ -115,12 +115,12 @@ const deleteChiNhanh = async (req, res) => {
     // thực hiện xóa
     sqlPool.request().query(deleteQuery, (sqlError) => {
       if (sqlError) {
-        res.json({ error: "Lỗi khi xóa chi nhánh trên SQL Server" });
+        res.json({ error: "Lỗi khi xóa trên SQL Server" });
       } else {
         mysqlConnection.query(deleteQuery, (mysqlError) => {
           if (mysqlError) {
-            console.error("Lỗi khi xóa chi nhánh trên MySQL:", mysqlError);
-            res.json({ error: "Lỗi khi xóa chi nhánh trên MySQL" });
+            console.error("Lỗi khi xóa trên MySQL:", mysqlError);
+            res.json({ error: "Lỗi khi xóa trên MySQL" });
           } else {
             res.status(200).json({
               message: "Đồng bộ xóa thành công!",

@@ -11,7 +11,7 @@ const getAllPhieuNhap = async (req, res) => {
     if (isPHIEUNHAP > 0) {
       res.status(200).json(allPHIEUNHAP.recordset);
     } else {
-      res.json({ message: "Không có phiếu nhập" });
+      res.json({ message: "Không có " });
     }
   } catch (error) {
     console.error(error);
@@ -30,7 +30,7 @@ const getPhieuNhapById = async (req, res) => {
     if (count > 0) {
       res.status(200).json(aPHIEUNHAP.recordset);
     } else {
-      res.send({ message: "Phiếu nhập không tồn tại" });
+      res.send({ message: "Không tồn tại" });
     }
   } catch (error) {
     res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
@@ -46,7 +46,7 @@ const createPhieuNhap = async (req, res) => {
   try {
     const TKExists = await checkInsert(checkPHIEUNHAP);
     if (TKExists) {
-      res.send({ message: "Phiếu nhập đã tồn tại" });
+      res.send({ message: "Đã tồn tại" });
       return;
     }
 
@@ -54,21 +54,19 @@ const createPhieuNhap = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res.send({ message: "Lỗi khi thêm phiếu nhập ở SQL Server" });
+        res.send({ message: "Lỗi khi thêm ở SQL Server" });
       } else {
         mysqlConnection.query(insertQuery, (mysqlError) => {
           if (mysqlError) {
-            res.send({ message: "Lỗi khi thêm phiếu nhập ở MySql" });
+            res.send({ message: "Lỗi khi thêm ở MySql" });
           } else {
-            res
-              .status(200)
-              .json({ message: "Đồng bộ thêm phiếu nhập thành công" });
+            res.status(200).json({ message: "Đồng bộ thêm thành công" });
           }
         });
       }
     });
   } catch (error) {
-    res.send({ message: "Thêm phiếu nhập không thành công" });
+    res.send({ message: "Thêm không thành công" });
   }
 };
 
@@ -89,21 +87,19 @@ const updatePhieuNhap = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res.send({ message: "Lỗi khi cập nhật phiếu nhập ở SQL Server" });
+        res.send({ message: "Lỗi khi cập nhật ở SQL Server" });
       } else {
         mysqlConnection.query(updateQuery, (mysqlError) => {
           if (mysqlError) {
-            res.send({ message: "Lỗi khi cập nhật phiếu nhập ở MySql" });
+            res.send({ message: "Lỗi khi cập nhật ở MySql" });
           } else {
-            res
-              .status(200)
-              .json({ message: "Đồng bộ cập nhật phiếu nhập thành công" });
+            res.status(200).json({ message: "Đồng bộ cập nhật thành công" });
           }
         });
       }
     });
   } catch (error) {
-    res.send({ message: "Cập nhật phiếu nhập không thành công" });
+    res.send({ message: "Cập nhật không thành công" });
   }
 };
 
@@ -121,16 +117,14 @@ const deletePhieuNhap = async (req, res) => {
 
     sqlPool.request().query(deleteteTK, (sqlError) => {
       if (sqlError) {
-        res.send({ message: "Lỗi khi xóa phiếu nhập ở SQL Server" });
+        res.send({ message: "Lỗi khi xóa ở SQL Server" });
       } else {
         mysqlConnection.query(deleteteTK, (mysqlError) => {
           if (mysqlError) {
             console.log(mysqlError);
-            res.send({ message: "Lỗi khi xóa phiếu nhập ở MySql" });
+            res.send({ message: "Lỗi khi xóa ở MySql" });
           } else {
-            res
-              .status(200)
-              .json({ message: "Đồng bộ xóa phiếu nhập thành công" });
+            res.status(200).json({ message: "Đồng bộ xóa thành công" });
           }
         });
       }

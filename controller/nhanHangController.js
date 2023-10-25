@@ -21,7 +21,7 @@ const getNHANHANGById = async (req, res) => {
     if (aNHANHANG.recordset.length > 0) {
       res.status(200).json(aNHANHANG.recordset);
     } else {
-      res.send({ error: "Không tìm thấy nhãn hàng!" });
+      res.send({ error: "Không tìm thấy !" });
     }
   } catch (error) {
     console.error(error);
@@ -37,7 +37,7 @@ const craeteNHANHANG = async (req, res) => {
   try {
     const TKExists = await checkInsert(checkNHANHANG);
     if (TKExists) {
-      res.send({ message: "nhãn hàng này đã tồn tại" });
+      res.send({ message: "Đã tồn tại" });
       return;
     }
 
@@ -45,22 +45,20 @@ const craeteNHANHANG = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res.send({ message: "Lỗi khi thêm nhãn hàng ở SQL Server" });
+        res.send({ message: "Lỗi khi thêm ở SQL Server" });
       } else {
         mysqlConnection.query(insertQuery, (mysqlError) => {
           if (mysqlError) {
-            res.send({ message: "Lỗi khi thêm nhãn hàng ở MySql" });
+            res.send({ message: "Lỗi khi thêm ở MySql" });
           } else {
-            res
-              .status(200)
-              .json({ message: "Đồng bộ thêm nhãn hàng thành công" });
+            res.status(200).json({ message: "Đồng bộ thêm thành công" });
           }
         });
       }
     });
   } catch (error) {
     console.error(error);
-    res.send({ message: "Thêm nhãn hàng không thành công" });
+    res.send({ message: "Thêm không thành công" });
   }
 };
 
@@ -81,12 +79,12 @@ const updateNHANHANG = async (req, res) => {
     // Sửa ở cả 2 cơ sở dữ liệu
     sqlPool.request().query(updateQuery, (sqlError) => {
       if (sqlError) {
-        res.json({ error: "Lỗi khi cập nhật nhãn hàng trên SQL Server" });
+        res.json({ error: "Lỗi khi cập nhật trên SQL Server" });
       } else {
         mysqlConnection.query(updateQuery, (mysqlError) => {
           if (mysqlError) {
-            console.error("Lỗi khi cập nhật nhãn hàng trên MySQL:", mysqlError);
-            res.json({ error: "Lỗi khi cập nhật nhãn hàng trên MySQL" });
+            console.error("Lỗi khi cập nhật trên MySQL:", mysqlError);
+            res.json({ error: "Lỗi khi cập nhật trên MySQL" });
           } else {
             res.status(200).json({
               message: "Đồng bộ cập nhật thành công!",
@@ -115,12 +113,12 @@ const deleteNHANHANG = async (req, res) => {
     // thực hiện xóa
     sqlPool.request().query(deleteQuery, (sqlError) => {
       if (sqlError) {
-        res.json({ error: "Lỗi khi xóa nhãn hàng trên SQL Server" });
+        res.json({ error: "Lỗi khi xóa trên SQL Server" });
       } else {
         mysqlConnection.query(deleteQuery, (mysqlError) => {
           if (mysqlError) {
-            console.error("Lỗi khi xóa nhãn hàng trên MySQL:", mysqlError);
-            res.json({ error: "Lỗi khi xóa nhãn hàng trên MySQL" });
+            console.error("Lỗi khi xóa trên MySQL:", mysqlError);
+            res.json({ error: "Lỗi khi xóa trên MySQL" });
           } else {
             res.status(200).json({
               message: "Đồng bộ xóa thành công!",

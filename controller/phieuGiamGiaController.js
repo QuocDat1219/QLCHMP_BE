@@ -10,7 +10,7 @@ const getAllPHIEUGIAMGIA = async (req, res) => {
     if (isPHIEUGIAMGIA > 0) {
       res.status(200).json(allPHIEUGIAMGIA.recordset);
     } else {
-      res.json({ message: "Không có phiếu giảm giá" });
+      res.json({ message: "Không có " });
     }
   } catch (error) {
     console.error(error);
@@ -29,7 +29,7 @@ const getPHIEUGIAMGIAById = async (req, res) => {
     if (count > 0) {
       res.status(200).json(aPHIEUGIAMGIA.recordset);
     } else {
-      res.send({ message: "phiếu giảm giá không tồn tại" });
+      res.send({ message: "Không tồn tại" });
     }
   } catch (error) {
     res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
@@ -50,7 +50,7 @@ const createPHIEUGIAMGIA = async (req, res) => {
   try {
     const TKExists = await checkInsert(checkPHIEUGIAMGIA);
     if (TKExists) {
-      res.send({ message: "phiếu giảm giá đã tồn tại" });
+      res.send({ message: "Đã tồn tại" });
       return;
     }
 
@@ -58,21 +58,21 @@ const createPHIEUGIAMGIA = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res.send({ message: "Lỗi khi thêm phiếu giảm giá ở SQL Server" });
+        res.send({ message: "Lỗi khi thêm ở SQL Server" });
       } else {
         mysqlConnection.query(insertQuery, (mysqlError) => {
           if (mysqlError) {
-            res.send({ message: "Lỗi khi thêm phiếu giảm giá ở MySql" });
+            res.send({ message: "Lỗi khi thêm ở MySql" });
           } else {
             res
               .status(200)
-              .json({ message: "Đồng bộ thêm phiếu giảm giá thành công" });
+              .json({ message: "Đồng bộ thêm thành công" });
           }
         });
       }
     });
   } catch (error) {
-    res.send({ message: "Thêm phiếu giảm giá không thành công" });
+    res.send({ message: "Thêm không thành công" });
   }
 };
 
@@ -98,21 +98,21 @@ const updatePHIEUGIAMGIA = async (req, res) => {
       if (sqlError) {
         console.error(sqlError);
 
-        res.send({ message: "Lỗi khi cập nhật phiếu giảm giá ở SQL Server" });
+        res.send({ message: "Lỗi khi cập nhật ở SQL Server" });
       } else {
         mysqlConnection.query(updateQuery, (mysqlError) => {
           if (mysqlError) {
-            res.send({ message: "Lỗi khi cập nhật phiếu giảm giá ở MySql" });
+            res.send({ message: "Lỗi khi cập nhật ở MySql" });
           } else {
             res
               .status(200)
-              .json({ message: "Đồng bộ cập nhật phiếu giảm giá thành công" });
+              .json({ message: "Đồng bộ cập nhật thành công" });
           }
         });
       }
     });
   } catch (error) {
-    res.send({ message: "Cập nhật phiếu giảm giá không thành công" });
+    res.send({ message: "Cập nhật không thành công" });
   }
 };
 
@@ -130,16 +130,16 @@ const deletePHIEUGIAMGIA = async (req, res) => {
 
     sqlPool.request().query(deleteteTK, (sqlError) => {
       if (sqlError) {
-        res.send({ message: "Lỗi khi xóa phiếu giảm giá ở SQL Server" });
+        res.send({ message: "Lỗi khi xóa ở SQL Server" });
       } else {
         mysqlConnection.query(deleteteTK, (mysqlError) => {
           if (mysqlError) {
             console.log(mysqlError);
-            res.send({ message: "Lỗi khi xóa phiếu giảm giá ở MySql" });
+            res.send({ message: "Lỗi khi xóa ở MySql" });
           } else {
             res
               .status(200)
-              .json({ message: "Đồng bộ xóa phiếu giảm giá thành công" });
+              .json({ message: "Đồng bộ xóa thành công" });
           }
         });
       }

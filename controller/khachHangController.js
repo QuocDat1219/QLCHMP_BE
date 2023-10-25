@@ -9,7 +9,7 @@ const getAllKhachHang = async (req, res) => {
     if (allKhachHang.recordset.length > 0) {
       res.status(200).json(allKhachHang.recordset);
     } else {
-      res.send({ message: "Không có khách hàng!" });
+      res.send({ message: "Không tồn tại" });
     }
   } catch (error) {
     res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
@@ -24,7 +24,7 @@ const getKhachHangById = async (req, res) => {
     if (aKhachHang.recordset.length > 0) {
       res.status(200).json(aKhachHang.recordset);
     } else {
-      res.send({ message: "Không tìm thấy khách hàng này!" });
+      res.send({ message: "Không tìm thấy" });
     }
   } catch (error) {
     res.send({ message: "Lỗi truy vấn cơ sở dữ liệu" });
@@ -46,29 +46,27 @@ const createKhachHang = async (req, res) => {
   try {
     const khExists = await checkInsert(checkKhachHang);
     if (khExists) {
-      res.send({ message: "Khách hàng đã tồn tại!" });
+      res.send({ message: "Đã tồn tại!" });
       return;
     }
 
     sqlPool.request().query(insertQuery, (sqlError) => {
       if (sqlError) {
         console.error(sqlError);
-        res.send({ message: "Lỗi khi thêm khách hàng ở SQL Server " });
+        res.send({ message: "Lỗi khi thêm ở SQL Server " });
       } else {
         mysqlConnection.query(insertQuery, (mysqlError) => {
           if (mysqlError) {
-            res.send({ message: "Lỗi khi thêm khách hàng ở Mysql" });
+            res.send({ message: "Lỗi khi thêm ở Mysql" });
           } else {
-            res
-              .status(200)
-              .json({ message: "Đồng bộ thêm khách hàng thành công" });
+            res.status(200).json({ message: "Đồng bộ thêm thành công" });
           }
         });
       }
     });
   } catch (error) {
     console.error(error);
-    res.send({ message: "Thêm khách hàng không thành công" });
+    res.send({ message: "Thêm không thành công" });
   }
 };
 
@@ -93,11 +91,11 @@ const updateKhachHang = async (req, res) => {
     sqlPool.request().query(updateQuery, (sqlError) => {
       if (sqlError) {
         console.error(sqlError);
-        res.send({ message: "Lỗi khi cập nhật khách hàng ở SQL Server" });
+        res.send({ message: "Lỗi khi cập nhật ở SQL Server" });
       } else {
         mysqlConnection.query(updateQuery, (sqlError) => {
           if (sqlError) {
-            res.send({ message: "Lỗi khi cập nhật khách hàng ở Mysql" });
+            res.send({ message: "Lỗi khi cập nhật ở Mysql" });
           } else {
             res.status(200).send({ message: "Đồng bộ cập nhật thành công" });
           }
@@ -123,11 +121,11 @@ const deleteKhachHang = async (req, res) => {
     sqlPool.request().query(deleteQuery, (sqlError) => {
       if (sqlError) {
         console.error(sqlError);
-        res.send({ message: "Lỗi khi xóa khách hàng ở SQL Server" });
+        res.send({ message: "Lỗi khi xóa ở SQL Server" });
       } else {
         mysqlConnection.query(deleteQuery, (sqlError) => {
           if (sqlError) {
-            res.send({ message: "Lỗi khi xóa khách hàng ở Mysql" });
+            res.send({ message: "Lỗi khi xóa ở Mysql" });
           } else {
             res.status(200).send({ message: "Đồng bộ xóa thành công" });
           }
