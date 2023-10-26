@@ -40,7 +40,7 @@ const getCHITIETHOADONById = async (req, res) => {
 const createCHITIETHOADON = async (req, res) => {
   const { reqMaHD, reqMaMH, reqSoLuong, reqDonGia, reqThanhTien } = req.body;
   const insertQuery = `INSERT INTO CHITIETHOADON VALUES ('${reqMaHD}','${reqMaMH}','${reqSoLuong}',N'${reqDonGia}','${reqThanhTien}')`;
-  const checkCHITIETHOADON = `SELECT cOUNT(*) as count FROM CHITIETHOADON WHERE MaHD = '${reqMaHD}'`;
+  const checkCHITIETHOADON = `SELECT cOUNT(*) as count FROM CHITIETHOADON WHERE MaHD = '${reqMaHD}' and MaMH = '${reqMaMH}'`;
 
   try {
     const TKExists = await checkInsert(checkCHITIETHOADON);

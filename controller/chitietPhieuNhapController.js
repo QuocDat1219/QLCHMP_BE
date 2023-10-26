@@ -47,7 +47,7 @@ const createCHITIETPHIEUNHAP = async (req, res) => {
     reqThanhTien,
   } = req.body;
   const insertQuery = `INSERT INTO CHITIETPHIEUNHAP VALUES ('${reqMaPhieuNhap}','${reqMaMH}','${reqGiaNhap}',N'${reqGiaBan}','${reqSoLuong}', '${reqThanhTien}')`;
-  const checkCHITIETPHIEUNHAP = `SELECT cOUNT(*) as count FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${reqMaPhieuNhap}'`;
+  const checkCHITIETPHIEUNHAP = `SELECT cOUNT(*) as count FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${reqMaPhieuNhap}' and MaMH = '${reqMaMH}'`;
 
   try {
     const TKExists = await checkInsert(checkCHITIETPHIEUNHAP);
