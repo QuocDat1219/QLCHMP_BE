@@ -123,7 +123,8 @@ const updateCHITIETPHIEUNHAP = async (req, res) => {
 
 const deleteCHITIETPHIEUNHAP = async (req, res) => {
   const id = req.params.id;
-  const deleteteTK = `DELETE FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${id}'`;
+  const { reqMaMH } = req.body;
+  const deleteteTK = `DELETE FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${id}' and MaMH = '${reqMaMH}'`;
   const checkTK = `SELECT cOUNT(*) as count FROM CHITIETPHIEUNHAP WHERE MaPhieuNhap = '${id}'`;
 
   try {

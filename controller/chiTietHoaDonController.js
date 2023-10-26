@@ -109,7 +109,8 @@ const updateCHITIETHOADON = async (req, res) => {
 
 const deleteCHITIETHOADON = async (req, res) => {
   const id = req.params.id;
-  const deleteteTK = `DELETE FROM CHITIETHOADON WHERE MaHD = '${id}'`;
+  const { reqMaMH } = req.body;
+  const deleteteTK = `DELETE FROM CHITIETHOADON WHERE MaHD = '${id}' and MaMH = '${reqMaMH}`;
   const checkTK = `SELECT cOUNT(*) as count FROM CHITIETHOADON WHERE MaHD = '${id}'`;
 
   try {
