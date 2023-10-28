@@ -4,6 +4,8 @@ const { executeOracleQuery } = require("../model/connect_oracle");
 const phanTanNgang = async (req, res) => {
   const { bang, cot, phantan, bangvitu, cotvitu, dieukienvitu } = req.body;
   let vitu,
+    tanchinhsql,
+    vitusql,
     nhanvienvitu,
     khachhangvitu,
     khovitu,
@@ -18,38 +20,29 @@ const phanTanNgang = async (req, res) => {
     phieuGiamGiaViTu,
     tanchinh = "";
   if (bangvitu || cotvitu || dieukienvitu) {
-    tanchinh = `select * from khuvuc where ${cot} = '${phantan}'`;
-    vitu = `SELECT cn.* FROM chinhanh cn INNER JOIN khuvuc kv ON cn.MaKV = kv.MaKV WHERE kv.${cot} = '${phantan}' AND cn.${cotvitu} = '${dieukienvitu}'`;
-    nhanvienvitu = `SELECT nv.* FROM nhanvien nv INNER JOIN chinhanh cn ON nv.MaCN = cn.MaCN INNER JOIN khuvuc kv ON kv.MaKV = cn.MaKV WHERE kv.${cot} = '${phantan}' AND cn.${cotvitu} = '${dieukienvitu}'`;
-    khachhangvitu = `SELECT kh.* FROM khachhang kh INNER JOIN chinhanh cn ON kh.MaCN = cn.MaCN INNER JOIN khuvuc kv ON kv.MaKV = cn.MaKV WHERE kv.${cot} = '${phantan}' AND cn.${cotvitu} = '${dieukienvitu}'`;
-    khovitu = `SELECT kho.* FROM kho INNER JOIN chinhanh cn ON kho.MaCN = cn.MaCN INNER JOIN khuvuc kv ON kv.MaKV = cn.MaKV WHERE kv.${cot} = '${phantan}' AND cn.${cotvitu} = '${dieukienvitu}'`;
-    taikhoanvitu = `SELECT tk.* FROM taikhoan tk INNER JOIN nhanvien nv ON nv.MaNV = tk.MaNV INNER JOIN chinhanh cn ON nv.MaCN = cn.MaCN INNER JOIN khuvuc kv ON kv.MaKV = cn.MaKV WHERE kv.${cot} = '${phantan}' AND cn.${cotvitu} = '${dieukienvitu}'`;
-    hoadonvitu = `SELECT hd.* FROM hoadon hd INNER JOIN khachhang kh ON kh.MaKH = hd.MaKH INNER JOIN nhanvien nv ON nv.MaNV = hd.MaNV INNER JOIN chinhanh cn ON cn.MaCN = kh.MaCN INNER JOIN khuvuc kv ON kv.MaKV = cn.MaKV WHERE kv.${cot} = '${phantan}' AND cn.${cotvitu} = '${dieukienvitu}'`;
-    phieunhapvitu = `SELECT pn.* FROM phieunhap pn INNER JOIN kho ON pn.MaKho = kho.MaKho INNER JOIN chinhanh cn ON cn.MaCN = kho.MaCN INNER JOIN khuvuc kv ON cn.MaKV = kv.MaKV WHERE kv.${cot} = '${phantan}' AND cn.${cotvitu} = '${dieukienvitu}'`;
-    sanphamvitu = `SELECT sp.* FROM sanpham sp INNER JOIN chitietphieunhap ctn ON sp.MaMH = ctn.MaMH INNER JOIN phieunhap pn ON pn.MaPhieuNhap = ctn.MaPhieuNhap INNER JOIN kho ON pn.MaKho = kho.MaKho INNER JOIN chinhanh cn ON kho.MaCN = cn.MaCN INNER JOIN khuvuc kv ON kv.MaKV = cn.MaKV WHERE kv.${cot} = '${phantan}' AND cn.${cotvitu} = '${dieukienvitu}'`;
-    ctphieunhapvitu = `SELECT ctn.* FROM chitietphieunhap ctn INNER JOIN phieunhap pn ON ctn.MaPhieuNhap = pn.MaPhieuNhap INNER JOIN kho ON kho.MaKho = pn.MaKho INNER JOIN chinhanh cn ON kho.MaCN = cn.MaCN INNER JOIN khuvuc kv ON kv.MaKV = cn.MaKV WHERE kv.${cot} = N'${phantan}' AND cn.${cotvitu} = '${dieukienvitu}'`;
-    danhmucvitu = `SELECT dm.* FROM danhmuc dm INNER JOIN sanpham sp ON dm.MaLH = sp.MaLH INNER JOIN chitietphieunhap ctn ON sp.MaMH = ctn.MaMH INNER JOIN phieunhap pn ON ctn.MaPhieuNhap = pn.MaPhieuNhap INNER JOIN kho ON kho.MaKho = pn.MaKho INNER JOIN chinhanh cn ON kho.MaCN = cn.MaCN INNER JOIN khuvuc kv ON kv.MaKV = cn.MaKV WHERE kv.${cot} = '${phantan}' AND cn.${cotvitu} = '${dieukienvitu}'`;
-    nhanhangvitu = `SELECT nh.* FROM nhanhang nh INNER JOIN sanpham sp ON nh.MaNH = sp.MaNH INNER JOIN chitietphieunhap ctn ON sp.MaMH = ctn.MaMH INNER JOIN phieunhap pn ON ctn.MaPhieuNhap = pn.MaPhieuNhap INNER JOIN kho ON kho.MaKho = pn.MaKho INNER JOIN chinhanh cn ON kho.MaCN = cn.MaCN INNER JOIN khuvuc kv ON kv.MaKV = cn.MaKV WHERE kv.${cot} = '${phantan}' AND cn.${cotvitu} = '${dieukienvitu}' GROUP BY nh.MaNH`;
-    cthoadonvitu = `SELECT cth.* FROM chitiethoadon cth INNER JOIN hoadon hd ON cth.MaHD = hd.MaHD INNER JOIN nhanvien nv ON hd.MaNV = nv.MaNV INNER JOIN chinhanh cn ON nv.MaCN = cn.MaCN INNER JOIN khuvuc kv ON cn.MaKV = kv.MaKV WHERE kv.${cot} = N'${phantan}' AND cn.${cotvitu} = '${dieukienvitu}'`;
-    phieuGiamGiaViTu = `SELECT pgg.* FROM phieugiamgia pgg INNER JOIN sanpham mh ON pgg.MaGiamGia = mh.MaGiamGia INNER JOIN chitiethoadon cthd ON mh.MaMH = cthd.MaMH INNER JOIN hoadon hd ON hd.MaHD = cthd.MaHD INNER JOIN khachhang kh ON kh.MaKH = hd.MaKH INNER JOIN chinhanh cn ON kh.MaCN = cn.MaCN INNER JOIN khuvuc kv ON kv.MaKV = cn.MaKV WHERE kv.${cot} = '${phantan}' AND cn.${cotvitu} = '${dieukienvitu}' GROUP BY pgg.MaGiamGia`;
+    vitusql = `SELECT cn.* into chinhanh FROM khuvuc kv inner join OPENQUERY(QLCHMP, 'SELECT cn.* FROM chinhanh cn') cn on kv.MaKV=cn.MaKV where cn.${cotvitu} = N'${dieukienvitu}'`;
+    tanchinhsql = `SELECT * into khuvuc FROM OPENQUERY(QLCHMP, 'SELECT * FROM khuvuc Where ${cot} = N''${phantan}''')`;
   } else {
-    tanchinh = `select * from khuvuc where ${cot} = '${phantan}'`;
-    vitu = `SELECT cn.* FROM chinhanh cn INNER JOIN khuvuc kv on cn.MaKV = kv.MaKV WHERE kv.${cot} = N'${phantan}'`;
-    nhanvienvitu = `SELECT nv.* from nhanvien nv INNER JOIN chinhanh cn on nv.MaCN = cn.MaCN INNER JOIN khuvuc kv ON kv.MaKV = cn.MaKV WHERE kv.${cot} = N'${phantan}'`;
-    khachhangvitu = `SELECT kh.* from khachhang kh INNER JOIN chinhanh cn on kh.MaCN = cn.MaCN INNER JOIN khuvuc kv ON kv.MaKV = cn.MaKV WHERE kv.${cot} =N'${phantan}'`;
-    khovitu = `SELECT kho.* from kho INNER JOIN chinhanh cn on kho.MaCN = cn.MaCN INNER JOIN khuvuc kv ON kv.MaKV = cn.MaKV WHERE kv.${cot} = N'${phantan}'`;
-    taikhoanvitu = `SELECT tk.* from taikhoan tk INNER JOIN nhanvien nv on nv.MaNV = tk.MaNV INNER JOIN chinhanh cn on nv.MaCN = cn.MaCN INNER JOIN khuvuc kv ON kv.MaKV = cn.MaKV WHERE kv.${cot} = N'${phantan}'`;
-    hoadonvitu = `SELECT hd.* FROM hoadon hd INNER JOIN khachhang kh ON kh.MaKH = hd.MaKH INNER JOIN nhanvien nv on nv.MaNV = hd.MaNV INNER join chinhanh cn on cn.MaCN = kh.MaCN INNER JOIN khuvuc kv on kv.MaKV = cn.MaKV WHERE kv.${cot} = N'${phantan}'`;
-    phieunhapvitu = `SELECT pn.* FROM phieunhap pn INNER JOIN kho ON pn.MaKho = kho.MaKho INNER JOIN chinhanh cn on cn.MaCN = kho.MaCN INNER JOIN khuvuc kv on cn.MaKV = kv.MaKV WHERE kv.${cot} = N'${phantan}'`;
-    sanphamvitu = `select sp.* from sanpham sp inner join chitietphieunhap ctn on sp.MaMH = ctn.MaMH inner join phieunhap pn on pn.MaPhieuNhap = ctn.MaPhieuNhap INNER join kho on pn.MaKho = kho.MaKho INNER join chinhanh cn on kho.MaCN = cn.MaCN INNER JOIN khuvuc kv on kv.MaKV = cn.MaKV where kv.${cot} = N'${phantan}'`;
-    ctphieunhapvitu = `SELECT ctn.* from chitietphieunhap ctn inner join phieunhap pn on ctn.MaPhieuNhap = pn.MaPhieuNhap INNER JOIN kho on kho.MaKho = pn.MaKho INNER JOIN chinhanh cn on kho.MaCN = cn.MaCN INNER JOIN khuvuc kv on kv.MaKV = cn.MaKV WHERE kv.${cot} = N'${phantan}'`;
-    danhmucvitu = `SELECT dm.* from danhmuc dm INNER JOIN sanpham sp on dm.MaLH = sp.MaLH INNER JOIN chitietphieunhap ctn on sp.MaMH = ctn.MaMH INNER join phieunhap pn on ctn.MaPhieuNhap = pn.MaPhieuNhap INNER join kho ON kho.MaKho = pn.MaKho INNER JOIN chinhanh cn on kho.MaCN = cn.MaCN INNER JOIN khuvuc kv on kv.MaKV = cn.MaKV WHERE kv.${cot} = N'${phantan}'`;
-    nhanhangvitu = `SELECT nh.* from nhanhang nh INNER JOIN sanpham sp on nh.MaNH = sp.MaNH INNER JOIN chitietphieunhap ctn on sp.MaMH = ctn.MaMH INNER join phieunhap pn on ctn.MaPhieuNhap = pn.MaPhieuNhap INNER join kho ON kho.MaKho = pn.MaKho INNER JOIN chinhanh cn on kho.MaCN = cn.MaCN INNER JOIN khuvuc kv on kv.MaKV = cn.MaKV WHERE kv.${cot} = N'${phantan}' GROUP BY nh.MaNH`;
-    cthoadonvitu = `select cth.* from chitiethoadon cth INNER JOIN hoadon hd on cth.MaHD = hd.MaHD INNER JOIN nhanvien nv on hd.MaNV = nv.MaNV INNER JOIN chinhanh cn on nv.MaCN = cn.MaCN INNER JOIN khuvuc kv ON cn.MaKV = kv.MaKV where kv.${cot}= N'${phantan}'`;
-    phieuGiamGiaViTu = `SELECT pgg.* from phieugiamgia pgg INNER JOIN sanpham mh on pgg.MaGiamGia = mh.MaGiamGia INNER JOIN chitiethoadon cthd on mh.MaMH = cthd.MaMH INNER JOIN hoadon hd on hd.MaHD = cthd.MaHD INNER JOIN khachhang kh on kh.MaKH = hd.MaKH INNER JOIN chinhanh cn on kh.MaCN = cn.MaCN INNER JOIN khuvuc kv on kv.MaKV = cn.MaKV where kv.${cot}=N'${phantan}' GROUP BY pgg.MaGiamGia`;
+    tanchinhsql = `SELECT * into khuvuc FROM OPENQUERY(QLCHMP, 'SELECT * FROM khuvuc Where ${cot} = N''${phantan}''')`;
+    vitusql = `SELECT cn.* into chinhanh FROM khuvuc kv inner join OPENQUERY(QLCHMP, 'SELECT cn.* FROM chinhanh cn') cn on kv.MaKV=cn.MaKV`;
   }
   if (bang || cot || phantan) {
     //tán bảng khu vực
+    tanchinh = `select * from khuvuc EXCEPT select * from khuvuc where ${cot} = '${phantan}'`;
+    vitu = `SELECT * FROM CHINHANH EXCEPT SELECT cn.* FROM chinhanh cn INNER JOIN khuvuc kv on cn.MaKV = kv.MaKV WHERE kv.${cot} = N'${phantan}'`;
+    nhanvienvitu = `SELECT * FROM NHANVIEN EXCEPT SELECT nv.* from nhanvien nv INNER JOIN chinhanh cn on nv.MaCN = cn.MaCN INNER JOIN khuvuc kv ON kv.MaKV = cn.MaKV WHERE kv.${cot} = N'${phantan}'`;
+    khachhangvitu = `SELECT * FROM KHACHHANG EXCEPT SELECT kh.* from khachhang kh INNER JOIN chinhanh cn on kh.MaCN = cn.MaCN INNER JOIN khuvuc kv ON kv.MaKV = cn.MaKV WHERE kv.${cot} =N'${phantan}'`;
+    khovitu = `SELECT * FROM KHO EXCEPT SELECT kho.* from kho INNER JOIN chinhanh cn on kho.MaCN = cn.MaCN INNER JOIN khuvuc kv ON kv.MaKV = cn.MaKV WHERE kv.${cot} = N'${phantan}'`;
+    taikhoanvitu = `SELECT * FROM TAIKHOAN EXCEPT SELECT tk.* from taikhoan tk INNER JOIN nhanvien nv on nv.MaNV = tk.MaNV INNER JOIN chinhanh cn on nv.MaCN = cn.MaCN INNER JOIN khuvuc kv ON kv.MaKV = cn.MaKV WHERE kv.${cot} = N'${phantan}'`;
+    hoadonvitu = `SELECT * FROM HOADON EXCEPT SELECT hd.* FROM hoadon hd INNER JOIN khachhang kh ON kh.MaKH = hd.MaKH INNER JOIN nhanvien nv on nv.MaNV = hd.MaNV INNER join chinhanh cn on cn.MaCN = kh.MaCN INNER JOIN khuvuc kv on kv.MaKV = cn.MaKV WHERE kv.${cot} = N'${phantan}'`;
+    phieunhapvitu = `SELECT * FROM PHIEUNHAP EXCEPT SELECT pn.* FROM phieunhap pn INNER JOIN kho ON pn.MaKho = kho.MaKho INNER JOIN chinhanh cn on cn.MaCN = kho.MaCN INNER JOIN khuvuc kv on cn.MaKV = kv.MaKV WHERE kv.${cot} = N'${phantan}'`;
+    sanphamvitu = `SELECT * FROM SANPHAM EXCEPT select sp.* from sanpham sp inner join chitietphieunhap ctn on sp.MaMH = ctn.MaMH inner join phieunhap pn on pn.MaPhieuNhap = ctn.MaPhieuNhap INNER join kho on pn.MaKho = kho.MaKho INNER join chinhanh cn on kho.MaCN = cn.MaCN INNER JOIN khuvuc kv on kv.MaKV = cn.MaKV where kv.${cot} = N'${phantan}'`;
+    ctphieunhapvitu = `SELECT * FROM CHITIETPHIEUNHAP EXCEPT SELECT ctn.* from chitietphieunhap ctn inner join phieunhap pn on ctn.MaPhieuNhap = pn.MaPhieuNhap INNER JOIN kho on kho.MaKho = pn.MaKho INNER JOIN chinhanh cn on kho.MaCN = cn.MaCN INNER JOIN khuvuc kv on kv.MaKV = cn.MaKV WHERE kv.${cot} = N'${phantan}'`;
+    danhmucvitu = `SELECT * FROM DANHMUC EXCEPT SELECT dm.* from danhmuc dm INNER JOIN sanpham sp on dm.MaLH = sp.MaLH INNER JOIN chitietphieunhap ctn on sp.MaMH = ctn.MaMH INNER join phieunhap pn on ctn.MaPhieuNhap = pn.MaPhieuNhap INNER join kho ON kho.MaKho = pn.MaKho INNER JOIN chinhanh cn on kho.MaCN = cn.MaCN INNER JOIN khuvuc kv on kv.MaKV = cn.MaKV WHERE kv.${cot} = N'${phantan}'`;
+    nhanhangvitu = `SELECT * FROM NHANHANG EXCEPT SELECT nh.* from nhanhang nh INNER JOIN sanpham sp on nh.MaNH = sp.MaNH INNER JOIN chitietphieunhap ctn on sp.MaMH = ctn.MaMH INNER join phieunhap pn on ctn.MaPhieuNhap = pn.MaPhieuNhap INNER join kho ON kho.MaKho = pn.MaKho INNER JOIN chinhanh cn on kho.MaCN = cn.MaCN INNER JOIN khuvuc kv on kv.MaKV = cn.MaKV WHERE kv.${cot} = N'${phantan}' GROUP BY nh.MaNH`;
+    cthoadonvitu = `SELECT * FROM CHITIETHOADON EXCEPT select cth.* from chitiethoadon cth INNER JOIN hoadon hd on cth.MaHD = hd.MaHD INNER JOIN nhanvien nv on hd.MaNV = nv.MaNV INNER JOIN chinhanh cn on nv.MaCN = cn.MaCN INNER JOIN khuvuc kv ON cn.MaKV = kv.MaKV where kv.${cot}= N'${phantan}'`;
+    phieuGiamGiaViTu = `SELECT * FROM PHIEUGIAMGIA EXCEPT SELECT pgg.* from phieugiamgia pgg INNER JOIN sanpham mh on pgg.MaGiamGia = mh.MaGiamGia INNER JOIN chitiethoadon cthd on mh.MaMH = cthd.MaMH INNER JOIN hoadon hd on hd.MaHD = cthd.MaHD INNER JOIN khachhang kh on kh.MaKH = hd.MaKH INNER JOIN chinhanh cn on kh.MaCN = cn.MaCN INNER JOIN khuvuc kv on kv.MaKV = cn.MaKV where kv.${cot}=N'${phantan}' GROUP BY pgg.MaGiamGia`;
+
     const result = await mysqlConnection.promise().query(tanchinh);
     const [results] = result;
     if (results.length > 0) {
@@ -660,14 +653,16 @@ const phanTanNgang = async (req, res) => {
         "ALTER TABLE sanpham ADD CONSTRAINT fk_PGG_MH FOREIGN KEY (MaGiamGia) REFERENCES phieugiamgia(MaGiamGia)";
       await executeOracleQuery(alterQueryPGG_FK_MH);
     }
+
     try {
+      console.log(tanchinh);
       const migrateSqlServer = [
-        `SELECT * into khuvuc FROM OPENQUERY(QLCHMP, 'SELECT * FROM khuvuc') except SELECT * FROM OPENQUERY(QLCHMP, 'SELECT * FROM khuvuc Where ${cot} = N''${phantan}''')`,
+        tanchinhsql,
 
         "alter table khuvuc add constraint pri_key_kv primary key (MaKV)",
 
         //Tạo bảng chi nhánh
-        "SELECT cn.* into chinhanh FROM khuvuc kv inner join OPENQUERY(QLCHMP, 'SELECT cn.* FROM chinhanh cn') cn on kv.MaKV=cn.MaKV",
+        vitusql,
 
         "alter table chinhanh add constraint pri_key_cn primary key (MaCN)",
         "alter table chinhanh add constraint FK_cn_kv foreign key (MaKV) references khuvuc(MaKV)",
@@ -742,7 +737,7 @@ const phanTanNgang = async (req, res) => {
         "alter table sanpham add constraint FK_mh_nh foreign key (MaNH) references nhanhang(MaNH)",
 
         //Tạo bảng phiếu giảm giá
-        "SELECT mgg.* into phieugiamgia FROM sanpham mh inner JOIN OPENQUERY(QLCHMP, 'SELECT mgg.* FROM phieugiamgia mgg') mgg ON mh.MaGiamGia = mgg.MaGiamGia",
+        "SELECT mgg.* into phieugiamgia FROM sanpham mh inner JOIN OPENQUERY(QLCHMP, 'SELECT mgg.* FROM phieugiamgia mgg') mgg ON mh.MaGiamGia = mgg.MaGiamGia group by mgg.MaGiamGia ,mgg.TenMaGG, mgg.GiaTriGiam, mgg.NgayApDung,mgg.NgayHetHan",
 
         "alter table phieugiamgia add constraint pri_key_pg primary key (MaGiamGia)",
         "alter table sanpham add constraint fk_mh_pgg foreign key (MaGiamGia) references phieugiamgia(MaGiamGia)",
@@ -754,9 +749,10 @@ const phanTanNgang = async (req, res) => {
       console.error(error);
       res.send({ message: "Lỗi khi phân tán Sql Server: " + error.message });
     }
+
     res.status(200).send({ message: "Phân tán thành công" });
   } else {
-    res.send({ message: "Lỗi khi phân tán dữ liệu" });
+    res.send({ message: "Lỗi khi phân tán dữ liệu Oracle" });
   }
 };
 
