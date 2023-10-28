@@ -58,7 +58,7 @@ const phanTanNgang = async (req, res) => {
         } else {
           const oracleQuery0 =
             "CREATE TABLE khuvuc (MaKV varchar2(20), TenKV varchar2(50), GhiChu varchar2(50))";
-          executeOracleQuery(oracleQuery0);
+          await executeOracleQuery(oracleQuery0);
         }
       } catch (oracleError0) {
         console.error("Tạo bảng không thành công:", oracleError0.message);
