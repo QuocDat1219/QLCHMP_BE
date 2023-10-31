@@ -40,7 +40,7 @@ const loginMysql = async (req, res) => {
 const getTable = async (req, res) => {
   const databasename = req.params.databasename;
   try {
-    if (databasename === "qlst") {
+    if (databasename === "ql_ch_mp") {
       mysqlConnection.query("SHOW FULL TABLES", (queryError, results) => {
         if (queryError) {
           console.error("Lỗi truy vấn MySQL:", queryError);
@@ -74,7 +74,7 @@ const getColumnOfTable = async (req, res) => {
         res.status(200).json({ columns });
       }
     );
-  } catch (error) {}
+  } catch (error) { }
 };
 
 const getDieuKienViTu = async (req, res) => {
@@ -92,7 +92,7 @@ const getDieuKienViTu = async (req, res) => {
         res.status(200).json({ data });
       }
     );
-  } catch (error) {}
+  } catch (error) { }
 };
 module.exports = {
   loginMysql,
