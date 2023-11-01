@@ -5,7 +5,7 @@ const { checkInsert, checkUpdate } = require("../auth/checkInfomation");
 const getAllMATHANG = async (req, res) => {
   try {
     const sqlQuery =
-      "select mh.MaMH as MaMH, lh.TenLH as TenLH, nxs.TenNsx as TenNsx, mh.MaGiamGia as MaGiamGia, mh.TenMH as TenMH,mh.GiamGia as GiamGia, mh.MoTa as MoTa, mh.DVT as DVT from sanpham mh inner join danhmuc lh on mh.MaLH = lh.MaLH inner join nhasanxuat nxs on mh.MaNSX = nxs.MaNsx";
+      "select mh.MaMH as MaMH, lh.TenLH as TenLH, nh.TenNH as TenNH, mh.MaGiamGia as MaGiamGia, mh.TenMH as TenMH,mh.GiamGia as GiamGia, mh.MoTa as MoTa, mh.DVT as DVT from sanpham mh inner join danhmuc lh on mh.MaLH = lh.MaLH inner join nhanhang nh on mh.MaNH = nh.MaNH";
     const allMATHANG = await sqlPool.request().query(sqlQuery);
     const isMATHANG = allMATHANG.recordset.length;
     if (isMATHANG > 0) {
