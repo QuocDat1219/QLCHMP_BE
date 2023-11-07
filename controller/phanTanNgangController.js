@@ -750,7 +750,7 @@ const phanTanNgang = async (req, res) => {
       res.send({ message: "Lỗi khi phân tán Sql Server: " + error.message });
     }
 
-    res.status(200).send({ message: "Phân tán thành công" });
+    res.send({ message: "Phân tán thành công" });
   } else {
     res.send({ message: "Lỗi khi phân tán dữ liệu Oracle" });
   }
