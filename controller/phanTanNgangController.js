@@ -2,6 +2,7 @@ const { sqlPool } = require("../model/connect_sqlserver");
 const { mysqlConnection } = require("../model/connect_mysql");
 const { executeOracleQuery } = require("../model/connect_oracle");
 const phanTanNgang = async (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
   const { bang, cot, phantan, bangvitu, cotvitu, dieukienvitu } = req.body;
   let vitu,
     tanchinhsql,
@@ -750,7 +751,7 @@ const phanTanNgang = async (req, res) => {
       res.send({ message: "Lỗi khi phân tán Sql Server: " + error.message });
     }
 
-    res.send({ message: "Phân tán thành công" });
+    res.status(200).send({ message: "Phân tán thành công" });
   } else {
     res.send({ message: "Lỗi khi phân tán dữ liệu Oracle" });
   }
