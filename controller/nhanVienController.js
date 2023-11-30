@@ -159,9 +159,13 @@ const nhanVienLogin = async (req, res) => {
     if (!recordExists) {
       res.send({ message: "Sai tên tài khoản hoặc mật khẩu" });
     } else {
-      res.status(200).send({ message: "Đăng nhập thành công" });
+      const userInfo = `select nv.MaNV as MaNV, TenNV,SDT,Quyen from taikhoan tk inner join nhanvien nv on tk.MaNV = nv.MaNV where tk.TenTK = '${req.body.taikhoan}' and tk.MatKhau = '${req.body.matkhau}'`;
+      const nhanvien = await sqlPool.request().query(userInfo);
+
+      res.status(200).json(nhanvien.recordset);
     }
   } catch (error) {
+    console.error(error);
     res.send({ message: "Lỗi trong quá trình đăng nhập" });
   }
 };
