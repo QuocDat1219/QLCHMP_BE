@@ -68,7 +68,7 @@ const updateChiNhanh = async (req, res) => {
   const { reqMaCN, reqTenCN, reqDiaChi, reqSdt, reqMaKV, reqGhiChu } = req.body;
 
   // Tạo lệnh truy vấn chung
-  const updateQuery = `UPDATE CHINHANH set TenCN='${reqTenCN}', DiaChi='${reqDiaChi}', Sdt='${reqSdt}',MaKV = '${reqMaKV}' GhiChu = '${reqGhiChu}' WHERE MaCN='${reqMaCN}'`;
+  const updateQuery = `UPDATE CHINHANH set TenCN='${reqTenCN}', DiaChi='${reqDiaChi}', Sdt='${reqSdt}',MaKV = '${reqMaKV}' ,GhiChu = '${reqGhiChu}' WHERE MaCN='${reqMaCN}'`;
   const checkChiNhanh = `SELECT cOUNT(*) as count FROM chinhanh WHERE MaCN = '${reqMaCN}'`;
 
   try {
